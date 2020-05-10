@@ -2,13 +2,13 @@ package sample.products.electronics;
 
 import sample.company.Manufacturer;
 
-public class Phone extends Electronics{
+public class Phone extends Electronics {
     private String memory;
     private String ram;
 
-    public Phone(String brand, String name, double price, int itemID, Manufacturer manufacturer,
-                 double size, String resolution, String memory, String ram) {
-        super(brand, name, price, itemID, manufacturer, size, resolution);
+    public Phone(String brand, String name, double price,
+                 Manufacturer manufacturer, double size, String resolution, String memory, String ram) {
+        super(brand, name, price, manufacturer, size, resolution);
         this.memory = memory;
         this.ram = ram;
     }

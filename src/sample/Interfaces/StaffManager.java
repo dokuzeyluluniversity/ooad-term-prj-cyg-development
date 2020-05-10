@@ -4,19 +4,22 @@ import sample.company.Employee;
 
 public interface StaffManager {
     /**
-     *     Adds a new employee
+     * Adds a new employee
      */
-    public void addEmployee​ (Employee employee);
+    void addEmployee(Employee employee);
+
     /**
-     *    Removes an employee
+     * Removes an employee
      */
-    public void removeEmployee​ (Employee employee);
+    void removeEmployee(Employee employee);
+
     /**
-     *    Edits an employee
+     * Edits an employee
      */
-    public void editEmployee​ (Employee employee);
+    void editEmployee(Employee employee);
+
     /**
-     *    Finds and returns employee with specified ID
+     * Finds and returns employee with specified ID
      */
-    public Employee searchEmployee​(int employeeID);
+    Employee searchEmployee(int employeeID);
 }

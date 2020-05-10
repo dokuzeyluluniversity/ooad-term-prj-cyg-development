@@ -56,7 +56,7 @@ public class HomeScreenController implements Initializable {
             pnlReportsScreen.toFront();
 
         } else if (eventSource == btnProduct) {
-            pnlReportsScreen.toFront();
+            pnlProductScreen.toFront();
 
         } else if (eventSource == btnCloseImg) {
             Stage s = (Stage) ((Node) eventSource).getScene().getWindow();

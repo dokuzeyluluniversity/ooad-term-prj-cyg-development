@@ -3,17 +3,18 @@ package sample.products;
 import sample.company.Manufacturer;
 
 public class Item {
+    private static int _itemID = 1;
     private String brand;
     private String name;
     private double price;
     private int itemID;
     private Manufacturer manufacturer;
 
-    public Item(String brand, String name, double price, int itemID, Manufacturer manufacturer) {
+    public Item(String brand, String name, double price, Manufacturer manufacturer) {
         this.brand = brand;
         this.name = name;
         this.price = price;
-        this.itemID = itemID;
+        this.itemID = _itemID++;
         this.manufacturer = manufacturer;
     }
 
@@ -60,11 +61,11 @@ public class Item {
     @Override
     public String toString() {
         return "Item{" +
-                "brand='" + brand + '\'' +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", itemID=" + itemID +
-                ", manufacturer=" + manufacturer +
-                '}';
+            "brand='" + brand + '\'' +
+            ", name='" + name + '\'' +
+            ", price=" + price +
+            ", itemID=" + itemID +
+            ", manufacturer=" + manufacturer +
+            '}';
     }
 }

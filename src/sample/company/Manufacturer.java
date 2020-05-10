@@ -4,33 +4,30 @@ import sample.Interfaces.InventoryManager;
 import sample.products.Item;
 import sample.utility.Address;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Manufacturer implements InventoryManager {
+    private static int _manufacturerID = 1;
     private String name;
     private int manufacturerID;
     private Address address;
     private String phoneNumber;
-    private List<Item> soldItemList;
+    private HashMap<Integer,Item> itemBag;
+    private HashMap<Integer,Integer> itemQuantity; //<item id, quantity>
 
 
-    public Manufacturer(String name, int manufacturerID, Address address, String phoneNumber) {
+    public Manufacturer(String name, Address address, String phoneNumber) {
         this.name = name;
-        this.manufacturerID = manufacturerID;
+        this.manufacturerID = _manufacturerID++;
         this.address = address;
+        this.itemQuantity = new HashMap<>();
         this.phoneNumber = phoneNumber;
-        this.soldItemList = new ArrayList<>();
+        this.itemBag = new HashMap<>();
     }
 
-
-    public void addItem(Item item) {
-        soldItemList.add(item);
+    public int getQuantity(int itemId) {
+        return itemQuantity.get(itemId);
     }
-   /* public void removeItem(Item item){
-        soldItemList.remove(item);
-    }*/
-
 
     public String getName() {
         return name;
@@ -72,47 +69,29 @@ public class Manufacturer implements InventoryManager {
     }
 
 
-    public List<Item> getSoldItemList() {
-        return soldItemList;
-    }
-
-
-    public void setSoldItemList(List<Item> soldItemList) {
-        this.soldItemList = soldItemList;
+    @Override
+    public void updateItem(Item item, int updateQuantity) {
+        this.itemQuantity.put(item.getItemID(), updateQuantity);
     }
 
     @Override
-    public void addItemToShop(Item item, Shop shopToAdd, int quantity) {
-
+    public void addNewItem(Item item, int quantity) {
+        this.itemBag.put(item.getItemID(), item);
+        this.itemQuantity.put(item.getItemID(), quantity);
     }
 
     @Override
-    public void removeItemFromShop(Item item, Shop shopToAdd, int quantity) {
-
+    public void transferItem(Shop destinationShop, Item transferredItem, int quantity) {
+        itemQuantity.replace(transferredItem.getItemID(), -quantity);
+        if (destinationShop.getQuantityOfItem(transferredItem.getItemID()) == 0) {
+            destinationShop.addNewItem(transferredItem, quantity);
+        } else {
+            destinationShop.updateItem(transferredItem, quantity);
+        }
     }
 
     @Override
-    public void addNewItem(Item item) {
-
-    }
-
-    @Override
-    public void removeItem(Item item) {
-
-    }
-
-    @Override
-    public void transferBetweenBranches(Shop originShop, Shop destinationShop, Item transferredItem, int quantity) {
-
-    }
-
-    @Override
-    public void orderItem(Item item, int quantity) {
-
-    }
-
-    @Override
-    public Item searchItem(int ItemID) {
-        return null;
+    public Item searchItem(int itemId) {
+        return itemBag.get(itemId);
     }
 }

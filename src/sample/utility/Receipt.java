@@ -1,30 +1,31 @@
 package sample.utility;
 
 import sample.company.Employee;
-import sample.products.Item;
+import sample.products.BasketItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Receipt {
-    private Date date;
+    private static int _ReceiptID = 1;
+    private String date;
     private double totalPrice;
     private Employee cashier;
-    private List<Item> cart;
+    private ArrayList<BasketItem> cart;
     private int receiptID;
 
-    public Receipt(Date date, double totalPrice, Employee cashier, List<Item> cart, int receiptID) {
+    public Receipt(String date, double totalPrice, Employee cashier, ArrayList<BasketItem> cart) {
         this.date = date;
         this.totalPrice = totalPrice;
         this.cashier = cashier;
         this.cart = cart;
-        this.receiptID = receiptID;
+        this.receiptID = _ReceiptID++;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -44,11 +45,11 @@ public class Receipt {
         this.cashier = cashier;
     }
 
-    public List<Item> getCart() {
+    public ArrayList<BasketItem> getCart() {
         return cart;
     }
 
-    public void setCart(List<Item> cart) {
+    public void setCart(ArrayList<BasketItem> cart) {
         this.cart = cart;
     }
 

@@ -5,9 +5,8 @@ import sample.company.Manufacturer;
 public class Footwear extends Clothing {
     private double size;
 
-    public Footwear(String brand, String name, double price, int itemID,
-                    Manufacturer manufacturer, String color, String gender, double size) {
-        super(brand, name, price, itemID, manufacturer, color, gender);
+    public Footwear(String brand, String name, double price, Manufacturer manufacturer, String color, String gender, double size) {
+        super(brand, name, price, manufacturer, color, gender);
         this.size = size;
     }
 

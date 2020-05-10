@@ -1,15 +1,15 @@
 package sample.products.electronics;
 
-import sample.products.Item;
 import sample.company.Manufacturer;
+import sample.products.Item;
 
 public class Electronics extends Item {
     private double size;
     private String resolution;
 
-    public Electronics(String brand, String name, double price, int itemID,
+    public Electronics(String brand, String name, double price,
                        Manufacturer manufacturer, double size, String resolution) {
-        super(brand, name, price, itemID, manufacturer);
+        super(brand, name, price, manufacturer);
         this.size = size;
         this.resolution = resolution;
     }

@@ -9,12 +9,18 @@ import javafx.stage.StageStyle;
 
 
 public class Main extends Application {
+    public static Stage appStage;
     private double xOffSet = 0;
     private double yOffSet = 0;
-    public static Stage appStage;
+
+    public static void main(String[] args) {
+
+
+        launch(args);
+    }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         appStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("gui/fxmls/loginScreen.fxml"));
         primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -31,12 +37,5 @@ public class Main extends Application {
             primaryStage.setY(event.getScreenY() - yOffSet);
         });
 
-        // TODO bunu çalıştır outputa bak, öyle bir ayarlaki şu electronics item yazmasın tüm parametreler
-        // TODO güzel bir şekilde display edilsin. Bunu yeni eklediğimiz her class için yap.
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

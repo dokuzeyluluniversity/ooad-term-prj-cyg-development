@@ -1,36 +1,29 @@
 package sample.Interfaces;
 
-import sample.products.Item;
 import sample.company.Shop;
+import sample.products.Item;
 
 public interface InventoryManager {
     /**
-     *  Adds an already existing item to mentioned branch
+     * Bu fonksiyon itemlerin sayısını gelen değerlere göre tekrardan güncelliyor
+     * quantity -5 , 5 şeklinde olabilir arttırmak için pozitif azaltmak için negatif değer
      */
-    public void addItemToShop(Item item, Shop shopToAdd, int quantity);
+    void updateItem(Item item, int quantity);
+
     /**
-     *  Removes an already existing item from a branch in specified quantity
+     * Removes an already existing item from a branch in specified quantity
      */
-    public void removeItemFromShop(Item item, Shop shopToAdd, int quantity);
+    void addNewItem(Item item, int quantity);
+
     /**
-     * Creates a new Item
+     * Removes an existing item from all branches and marks it as removed
      */
-    public void addNewItem(Item item);
+    void transferItem(Shop destinationShop, Item transferredItem, int quantity);
+
+
     /**
-     *  Removes an existing item from all branches and marks it as removed
+     * Searches and returns an item from Inventor
      */
-    public void removeItem(Item item);
-    /**
-     *  Transfers specified product from origin Shop to destination
-     */
-    public void transferBetweenBranches(Shop originShop, Shop destinationShop, Item transferredItem, int quantity);
-    /**
-     *  Orders items in specified quantity from the item’s manufacturer
-     */
-    public void orderItem(Item item, int quantity);
-    /**
-     *  Searches and returns an item from Inventor
-     */
-    public Item searchItem(int ItemID);
+    Item searchItem(int ItemID);
 
 }

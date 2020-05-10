@@ -22,26 +22,20 @@ import java.util.logging.Logger;
 
 public class LoginScreenController implements Initializable {
 
+    public static String currentUser;
     private HashMap<String,String> accounts = new HashMap<>();
     @FXML
     private JFXTextField txtUsername;
-
     @FXML
     private JFXPasswordField txtPassword;
-
     @FXML
     private JFXButton btnSignIn;
-
     @FXML
     private JFXButton btnCloseImg;
-
     @FXML
     private JFXButton btnRestoreImg;
-
     @FXML
     private JFXButton btnMinimizeImg;
-
-    public static String currentUser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,6 +72,7 @@ public class LoginScreenController implements Initializable {
                 System.out.println("şifre yanlış");*/
         }
     }
+
     private void changeScene(String fxml) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
@@ -87,6 +82,7 @@ public class LoginScreenController implements Initializable {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
+
     public void setPasswords() {
         accounts.put("oktay", "1212");
         accounts.put("goksel", "1326");

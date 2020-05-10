@@ -5,6 +5,7 @@ import sample.utility.Position;
 
 public class Employee {
 
+    private static int _employeeID = 1;
     private String name;
     private Address address;
     private int phoneNumber;
@@ -17,14 +18,14 @@ public class Employee {
 
     // TODO String Position yolla İçeride Position oluştur
     public Employee(String name, Address address, int phoneNumber, int weeklyWorkHours,
-                    Position position, int shopID, int employeeID, String password, int weeklyWageBonus) {
+                    Position position, int shopID, String password, int weeklyWageBonus) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.weeklyWorkHours = weeklyWorkHours;
         this.position = position;
         this.shopID = shopID;
-        this.employeeID = employeeID;
+        this.employeeID = _employeeID++;
         this.password = password;
         this.weeklyWageBonus = weeklyWageBonus;
     }

@@ -4,7 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -17,41 +19,29 @@ import java.util.ResourceBundle;
 
 public class ReportsScreenController implements Initializable {
 
-    private ObservableList<Shop> Shops = null;
-
-    @FXML
-    private ComboBox<Shop> cbShopList;
-
-    @FXML
-    private Text txtShops;
-
-    @FXML
-    private Text txtTotalIncome;
-
-    @FXML
-    private Text txtDays;
-
-    @FXML
-    private Text txtCname;
-
-    @FXML
-    private HBox lblShopInfo;
-
-    @FXML
-    private HBox lblCharts;
-
-    @FXML
-    private PieChart chartSale;
-
-    @FXML
-    private PieChart chartEmployee;
-
-    @FXML
-    private LineChart<?, ?> chartTotalIncome;
-
-
     public static int totalCam;
     public static int totalShops;
+    private ObservableList<Shop> Shops = null;
+    @FXML
+    private ComboBox<Shop> cbShopList;
+    @FXML
+    private Text txtShops;
+    @FXML
+    private Text txtTotalIncome;
+    @FXML
+    private Text txtDays;
+    @FXML
+    private Text txtCname;
+    @FXML
+    private HBox lblShopInfo;
+    @FXML
+    private HBox lblCharts;
+    @FXML
+    private PieChart chartSale;
+    @FXML
+    private PieChart chartEmployee;
+    @FXML
+    private LineChart<?,?> chartTotalIncome;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,9 +53,9 @@ public class ReportsScreenController implements Initializable {
     private void loadData() {
         // Add companies
         Shops = FXCollections.observableArrayList(
-            new Shop(541, "Buca", new Address("İzmir","Buca","Dokuzçeşmeler")),
-            new Shop(542, "Konak", new Address("İzmir","Konak","Alsancak")),
-            new Shop(543, "Bornova", new Address("İzmir","Bornova","Metro"))
+            new Shop(541, "Buca", new Address("İzmir", "Buca", "Dokuzçeşmeler")),
+            new Shop(542, "Konak", new Address("İzmir", "Konak", "Alsancak")),
+            new Shop(543, "Bornova", new Address("İzmir", "Bornova", "Metro"))
         );
         // Set Companies
         if (Shops != null) {
@@ -90,23 +80,23 @@ public class ReportsScreenController implements Initializable {
             lblCharts.setVisible(true);
 
             /////////////// set infos
-            txtCname.setText(newVal.getEmailAddress()+" INFOS:");
-            txtShops.setText(String.valueOf( newVal.getShopID() ));
-            txtTotalIncome.setText(String.valueOf( newVal.getPhoneNumber() ));
+            txtCname.setText(newVal.getEmailAddress() + " INFOS:");
+            txtShops.setText(String.valueOf(newVal.getShopID()));
+            txtTotalIncome.setText(String.valueOf(newVal.getPhoneNumber()));
             txtDays.setText("100");
 
             ////////////// set graphs
             ObservableList<PieChart.Data> employeeData = FXCollections.observableArrayList(
-                new PieChart.Data("Göksel",50),
-                new PieChart.Data("Oktay",60),
-                new PieChart.Data("Taylan",20),
-                new PieChart.Data("Berhan",90)
+                new PieChart.Data("Göksel", 50),
+                new PieChart.Data("Oktay", 60),
+                new PieChart.Data("Taylan", 20),
+                new PieChart.Data("Berhan", 90)
             );
             ObservableList<PieChart.Data> incomeData = FXCollections.observableArrayList(
-                new PieChart.Data("Television",10),
-                new PieChart.Data("Phone",30),
-                new PieChart.Data("Tshirt",50),
-                new PieChart.Data("Footwear",80)
+                new PieChart.Data("Television", 10),
+                new PieChart.Data("Phone", 30),
+                new PieChart.Data("Tshirt", 50),
+                new PieChart.Data("Footwear", 80)
             );
 
             chartSale.setData(incomeData);

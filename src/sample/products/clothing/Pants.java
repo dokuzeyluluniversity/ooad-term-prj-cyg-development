@@ -6,9 +6,8 @@ public class Pants extends Clothing {
     private int sizeWidth;
     private int sizeLength;
 
-    public Pants(String brand, String name, double price, int itemID, Manufacturer manufacturer,
-                 String color, String gender, int sizeWidth, int sizeLength) {
-        super(brand, name, price, itemID, manufacturer, color, gender);
+    public Pants(String brand, String name, double price, Manufacturer manufacturer, String color, String gender, int sizeWidth, int sizeLength) {
+        super(brand, name, price, manufacturer, color, gender);
         this.sizeWidth = sizeWidth;
         this.sizeLength = sizeLength;
     }
