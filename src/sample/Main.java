@@ -6,17 +6,29 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.company.Database;
+
+import java.io.IOException;
 
 
 public class Main extends Application {
     public static Stage appStage;
+    private static Database database;
     private double xOffSet = 0;
     private double yOffSet = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-
+        setDatabase(new Database());
         launch(args);
+    }
+
+    public static Database getDatabase() {
+        return database;
+    }
+
+    public static void setDatabase(Database database) {
+        Main.database = database;
     }
 
     @Override

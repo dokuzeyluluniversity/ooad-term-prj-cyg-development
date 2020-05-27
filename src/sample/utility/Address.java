@@ -11,11 +11,35 @@ public class Address {
         this.street = street;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
     @Override
     public String toString() {
-        return  "city: '" + city + '\'' +
-                ", town: '" + town + '\'' +
-                ", street: '" + street + '\'';
+        return "city: '" + city + '\'' +
+            ", town: '" + town + '\'' +
+            ", street: '" + street + '\'';
     }
 
 }

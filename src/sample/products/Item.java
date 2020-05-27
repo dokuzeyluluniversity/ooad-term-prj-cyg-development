@@ -3,7 +3,7 @@ package sample.products;
 import sample.company.Manufacturer;
 
 public class Item {
-    private static int _itemID = 1;
+    private static int _itemID = 0;
     private String brand;
     private String name;
     private double price;

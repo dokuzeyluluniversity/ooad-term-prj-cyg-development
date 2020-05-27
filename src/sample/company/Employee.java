@@ -8,17 +8,18 @@ public class Employee {
     private static int _employeeID = 1;
     private String name;
     private Address address;
-    private int phoneNumber;
+    private String phoneNumber;
     private int weeklyWorkHours;
     private Position position;
     private int shopID;
     private int employeeID;
+    private String username;
     private String password;
     private int weeklyWageBonus;
 
     // TODO String Position yolla İçeride Position oluştur
-    public Employee(String name, Address address, int phoneNumber, int weeklyWorkHours,
-                    Position position, int shopID, String password, int weeklyWageBonus) {
+    public Employee(String name, Address address, String phoneNumber, int weeklyWorkHours,
+                    Position position, int shopID, String username, String password, int weeklyWageBonus) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -26,10 +27,18 @@ public class Employee {
         this.position = position;
         this.shopID = shopID;
         this.employeeID = _employeeID++;
+        this.username = username;
         this.password = password;
         this.weeklyWageBonus = weeklyWageBonus;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getName() {
         return name;
@@ -47,11 +56,11 @@ public class Employee {
         this.address = address;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

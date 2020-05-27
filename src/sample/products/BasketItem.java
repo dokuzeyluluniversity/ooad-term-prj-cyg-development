@@ -1,6 +1,5 @@
 package sample.products;
 
-
 public class BasketItem {
     private int itemID;
     private String name;
@@ -36,8 +35,9 @@ public class BasketItem {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantity() {
+        this.quantity++;
+        setTotal();
     }
 
     public double getPrice() {
@@ -52,7 +52,21 @@ public class BasketItem {
         return total;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
+    public void setTotal() {
+        double val = price * quantity * 100;
+        val = Math.round(val);
+        val = val / 100;
+        this.total = val;
+    }
+
+    @Override
+    public String toString() {
+        return
+            "ItemID=" + itemID +
+            "\t Name='" + name + '\'' +
+            "\t Quantity=" + quantity +
+            "\t Price=" + price +
+            "\t Total=" + total
+            ;
     }
 }

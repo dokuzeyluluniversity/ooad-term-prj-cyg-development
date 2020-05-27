@@ -1,29 +1,56 @@
 package sample.gui.controllers;
 
+import animatefx.animation.FadeIn;
 import animatefx.animation.Shake;
+import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import sample.Main;
+import sample.company.Database;
+import sample.company.Employee;
+import sample.company.Shop;
 import sample.products.BasketItem;
 import sample.products.Item;
-import sample.products.electronics.Television;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class SaleScreenController implements Initializable {
 
-    List<Item> itemList = new ArrayList<>();
+
+    ArrayList<Item> itemList = new ArrayList<>();
+    @FXML
+    private AnchorPane pnlSale;
     @FXML
     private TextField txtAdd;
     @FXML
     private Button btnAdd;
+    @FXML
+    private TextField txtSearchItem;
+    @FXML
+    private ListView<String> listViewItems;
+    @FXML
+    private TextArea txtTest;
+    @FXML
+    private Button btnRemove;
+    @FXML
+    private Label txtAmount;
+    @FXML
+    private AnchorPane pnlReceipt;
+    @FXML
+    private JFXButton btnBack;
+    @FXML
+    private JFXButton btnFinishSale;
+    @FXML
+    private TextArea txtReceipt;
     @FXML
     private TableView<BasketItem> tableBasket;
     private TableColumn idCol = new TableColumn("ID");
@@ -31,65 +58,35 @@ public class SaleScreenController implements Initializable {
     private TableColumn quantityCol = new TableColumn("QUANTITY");
     private TableColumn priceCol = new TableColumn("PRICE");
     private TableColumn totalCol = new TableColumn("TOTAL");
-    @FXML
-    private TextArea txtTest;
+    private Database database;
+    private Employee currentUser;
+    private Shop currentShop;
+
+
     private ObservableList<BasketItem> basket = FXCollections.observableArrayList();
 
-    @FXML
-    void btnAdd(ActionEvent event) {
-        if (!txtAdd.getText().isEmpty()) {
-
-
-            String id = txtAdd.getText();
-            txtAdd.clear();
-            Item item = search(Integer.parseInt(id));
-
-            if (item != null) {
-
-
-                if (containsName(basket, Integer.parseInt(id)))
-                    // TODO aynı eleman gelince buluyor, quantity ve totali değiştir.
-                    System.out.println("Aynı elemanı koyuyoruz quantity artacak sadece");
-                else
-                    basket.add(new BasketItem(item.getItemID(), item.getName(), 1, item.getPrice(), item.getPrice()));
-                txtTest.setText(item.getName());
-            } else
-                System.out.println("Item not found!!");
-        } else
-            new Shake(txtAdd).play();
-
-    }
-
-    public boolean containsName(final ObservableList<BasketItem> list, final int itemID) {
-        return list.stream().anyMatch(o -> o.getItemID() == itemID);
-    }
-
-    public Item search(int id) {
-        Item item = null;
-        for (int i = 0; i < itemList.size(); i++) {
-            if (itemList.get(i).getItemID() == id) {
-                item = itemList.get(i);
-            }
+    public static ArrayList<String> getItemNames(ArrayList<Item> items) {
+        ArrayList<String> itemNames = new ArrayList<>();
+        for (Item item : items) {
+            itemNames.add(item.getName());
         }
-        return item;
+        return itemNames;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Testing
-        Television tv1 = new Television("1", "tv1", 5, null,
-            1, "1", true);
-        Television tv2 = new Television("2", "tv2", 5, null,
-            2, "2", true);
-        itemList.add(tv1);
-        itemList.add(tv2);
-        Item item = search(Integer.parseInt("1"));
-        txtTest.setText(item.getName());
-        basket.add(new BasketItem(item.getItemID(), item.getName(), 1, item.getPrice(), item.getPrice()));
-        Item item2 = search(Integer.parseInt("2"));
-        txtTest.setText(item.getName());
-        basket.add(new BasketItem(item2.getItemID(), item2.getName(), 1, item2.getPrice(), item2.getPrice()));
+        database = Main.getDatabase();
+        currentUser = LoginScreenController.getCurrentUser();
+        currentShop = database.getCYGCOMPANY().getShopList().get(currentUser.getShopID());
 
+        setListViewItems();
+        setTableBasket();
+        setAmount();
+        setItemActions();
+
+    }
+
+    public void setTableBasket() {
         idCol.setCellValueFactory(
             new PropertyValueFactory<BasketItem,Integer>("itemID"));
 
@@ -106,6 +103,160 @@ public class SaleScreenController implements Initializable {
 
         tableBasket.setItems(basket);
         tableBasket.getColumns().addAll(idCol, nameCol, quantityCol, priceCol, totalCol);
+        tableBasket.setPlaceholder(new Label(""));
     }
+
+    public void setListViewItems() {
+        for (Item item : Database.getCYGCOMPANY().getShopList().get(currentUser.getShopID()).getItemBag().values()) {
+            System.out.println(item.getName());
+            itemList.add(item);
+        }
+    }
+
+    public void setAmount() {
+        double amount = 0;
+        for (BasketItem item : basket) {
+            amount += item.getTotal();
+        }
+        double val = amount * 100;
+        val = Math.round(val);
+        val = val / 100;
+        txtAmount.setText(String.valueOf(val));
+    }
+
+    @FXML
+    void cancelSale() {
+        basket.clear();
+        setAmount();
+    }
+
+    @FXML
+    void generateReceipt() {
+        ArrayList<BasketItem> basketItems = new ArrayList<>(basket);
+        String temp ="";
+
+        for (BasketItem basketItem: basketItems){
+            temp += basketItem.toString() + "\n";
+        }
+        temp += "\n\t\t\tTotal Amount: " + txtAmount.getText();
+        txtReceipt.setText(temp);
+        new FadeIn(pnlReceipt).play();
+        pnlReceipt.toFront();
+    }
+
+    @FXML
+    void removeItem() {
+        if (tableBasket.getSelectionModel().getSelectedItem() == null) {
+            new Shake(btnRemove).play();
+        } else {
+            BasketItem selectedItem = tableBasket.getSelectionModel().getSelectedItem();
+            basket.remove(selectedItem);
+            System.out.println(selectedItem.getName() + " deleted");
+            setAmount();
+        }
+
+    }
+
+    @FXML
+    void backToSalePanel() {
+        new FadeIn(pnlSale).play();
+        pnlSale.toFront();
+    }
+
+    @FXML
+    void finishSale() {
+        ArrayList<BasketItem> basketItems = new ArrayList<>(basket);
+        currentShop.sellItem(basketItems, currentUser);
+        cancelSale();
+
+        new FadeIn(pnlSale).play();
+        pnlSale.toFront();
+    }
+
+    public boolean containsName(final ObservableList<BasketItem> list, final int itemID) {
+        return list.stream().anyMatch(o -> o.getItemID() == itemID);
+    }
+
+    public BasketItem getItem(int id) {
+        for (BasketItem variable : basket) {
+            if (variable.getItemID() == id) {
+                return variable;
+            }
+        }
+        return null;
+    }
+
+    public void setItemActions() {
+
+        for (Item item : itemList) {
+            listViewItems.getItems().add(item.getName());
+        }
+        txtSearchItem.setOnKeyReleased(e -> {
+            listViewItems.getItems().clear();
+            if (!txtSearchItem.getText().isEmpty()) {
+                for (int i = 0; i < itemList.size(); i++) {
+                    if (itemList.get(i).getName().toLowerCase().contains(txtSearchItem.getText().toLowerCase())) {
+                        listViewItems.getItems().add(itemList.get(i).getName());
+                    }
+                }
+            } else {
+                listViewItems.getItems().addAll(getItemNames(itemList));
+            }
+            setAmount();
+        });
+
+        listViewItems.setOnMouseClicked(click -> {
+
+            if (click.getClickCount() == 2) {
+                Item item = getItemWithName(listViewItems.getSelectionModel().getSelectedItem());
+                if (containsName(basket, item.getItemID())) {
+                    BasketItem temp = getItem(item.getItemID());
+
+                    System.out.println(temp.getQuantity());
+                    temp.setQuantity();
+                    System.out.println(temp.getQuantity());
+
+                    tableBasket.getColumns().get(0).setVisible(false);
+                    tableBasket.getColumns().get(0).setVisible(true);
+                } else {
+                    basket.add(new BasketItem(item.getItemID(), item.getName(), 1, item.getPrice(), item.getPrice()));
+                }
+            }
+            setAmount();
+        });
+        txtSearchItem.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                if (!listViewItems.getItems().isEmpty()) {
+                    listViewItems.getSelectionModel().select(0);
+                    Item item = getItemWithName(listViewItems.getSelectionModel().getSelectedItem());
+                    if (containsName(basket, item.getItemID())) {
+                        BasketItem temp = getItem(item.getItemID());
+
+                        System.out.println(temp.getQuantity());
+                        temp.setQuantity();
+                        System.out.println(temp.getQuantity());
+
+                        tableBasket.getColumns().get(0).setVisible(false);
+                        tableBasket.getColumns().get(0).setVisible(true);
+                    } else {
+                        basket.add(new BasketItem(item.getItemID(), item.getName(), 1, item.getPrice(), item.getPrice()));
+                    }
+                } else
+                    new Shake(txtSearchItem).play();
+            }
+            setAmount();
+        });
+
+    }
+
+    public Item getItemWithName(String name) {
+        for (Item variable : itemList) {
+            if (variable.getName() == name) {
+                return variable;
+            }
+        }
+        return null;
+    }
+
 
 }

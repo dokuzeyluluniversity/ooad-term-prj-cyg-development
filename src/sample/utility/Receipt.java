@@ -6,7 +6,7 @@ import sample.products.BasketItem;
 import java.util.ArrayList;
 
 public class Receipt {
-    private static int _ReceiptID = 1;
+    private static int _ReceiptID = 0;
     private String date;
     private double totalPrice;
     private Employee cashier;

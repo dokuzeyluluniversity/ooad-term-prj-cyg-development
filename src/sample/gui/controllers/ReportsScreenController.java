@@ -11,8 +11,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import sample.Main;
+import sample.company.Database;
 import sample.company.Shop;
-import sample.utility.Address;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +22,8 @@ public class ReportsScreenController implements Initializable {
 
     public static int totalCam;
     public static int totalShops;
-    private ObservableList<Shop> Shops = null;
+    Database database;
+    private ObservableList<Shop> shops = null;
     @FXML
     private ComboBox<Shop> cbShopList;
     @FXML
@@ -45,27 +47,25 @@ public class ReportsScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        database = Main.getDatabase();
         loadData();
         refreshData();
     }
 
 
     private void loadData() {
+
         // Add companies
-        Shops = FXCollections.observableArrayList(
-            new Shop(541, "Buca", new Address("İzmir", "Buca", "Dokuzçeşmeler")),
-            new Shop(542, "Konak", new Address("İzmir", "Konak", "Alsancak")),
-            new Shop(543, "Bornova", new Address("İzmir", "Bornova", "Metro"))
-        );
+        shops = FXCollections.observableArrayList(database.getCYGCOMPANY().getShopList());
         // Set Companies
-        if (Shops != null) {
-            cbShopList.setItems(Shops);  // set companies
+        if (shops != null) {
+            cbShopList.setItems(shops);  // set companies
         }
 
         cbShopList.setConverter(new StringConverter<Shop>() {
             @Override
             public String toString(Shop object) {
-                return object.getEmailAddress();
+                return object.getName();
             }
 
             @Override
@@ -118,9 +118,9 @@ public class ReportsScreenController implements Initializable {
     }
 
     private void refreshData() {
-        totalShops = Shops.size();
+        totalShops = shops.size();
         for (int i = 0; i < totalShops; i++) { //get total shops
-            totalCam += Shops.get(i).getShopID();
+            totalCam += shops.get(i).getShopID();
         }
 
 

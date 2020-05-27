@@ -8,23 +8,49 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Company implements StaffManager {
-    private ArrayList<Shop> shopList;
-    private HashMap<Integer,Item> products;
+    private ArrayList<Item> products;
     private int phoneNumber;
     private String emailAddress;
     private Address address;
+    private ArrayList<Shop> shopList;
     private ArrayList<Employee> employeeList;
+    private HashMap<String,Employee> employeeHashMap;
+    private HashMap<String,Shop> shopHashMap;
+    private ArrayList<Manufacturer> manufacturerArraylist;
 
 
     public Company(int phoneNumber, String emailAddress, Address address) {
         this.shopList = new ArrayList<>();
-        this.products = new HashMap<>();
+        this.products = new ArrayList<>();
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
         this.address = address;
         this.employeeList = new ArrayList<>();
+        this.employeeHashMap = new HashMap<>();
+        this.shopHashMap = new HashMap<>();
+        this.manufacturerArraylist = new ArrayList<>();
     }
 
+    public void addItemToManufacturer(Item item, int manufacturerID) {
+        manufacturerArraylist.get(manufacturerID).addNewItem(item, Integer.MAX_VALUE);
+        products.add(item);
+    }
+
+    public ArrayList<Manufacturer> getManufacturerArraylist() {
+        return manufacturerArraylist;
+    }
+
+    public void setManufacturerArraylist(ArrayList<Manufacturer> manufacturerArraylist) {
+        this.manufacturerArraylist = manufacturerArraylist;
+    }
+
+    public HashMap<String,Shop> getShopHashMap() {
+        return shopHashMap;
+    }
+
+    public void setShopHashMap(HashMap<String,Shop> shopHashMap) {
+        this.shopHashMap = shopHashMap;
+    }
 
     public Item getItem(int itemId) {
         return products.get(itemId);
@@ -62,10 +88,34 @@ public class Company implements StaffManager {
         this.address = address;
     }
 
+    public HashMap<String,Employee> getEmployeeHashMap() {
+        return employeeHashMap;
+    }
+
+    public void setEmployeeHashMap(HashMap<String,Employee> employeeHashMap) {
+        this.employeeHashMap = employeeHashMap;
+    }
+
+    public ArrayList<Item> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<Item> products) {
+        this.products = products;
+    }
+
+    public ArrayList<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(ArrayList<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
 
     @Override
     public void addEmployee(Employee employee) {
         employeeList.add(employee);
+        employeeHashMap.put(employee.getUsername(), employee);
         System.out.println("New employee (" + employee.getName() + ") added..");
     }
 
@@ -123,9 +173,9 @@ public class Company implements StaffManager {
         return foundEmployee;
     }
 
-    //TODO Shop class added by Oktay Türkdağlı
     public void addShop(Shop shop) {
         shopList.add(shop);
+        shopHashMap.put(shop.getName(), shop);
         System.out.println("New employee (" + shop.getShopID() + ") added..");
     }
 

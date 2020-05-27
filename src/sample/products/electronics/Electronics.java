@@ -33,8 +33,8 @@ public class Electronics extends Item {
     @Override
     public String toString() {
         return "Electronics{" +
-                "size=" + size +
-                ", resolution='" + resolution + '\'' +
-                '}' + super.toString();
+            "size=" + size +
+            ", resolution='" + resolution + '\'' +
+            '}' + super.toString();
     }
 }

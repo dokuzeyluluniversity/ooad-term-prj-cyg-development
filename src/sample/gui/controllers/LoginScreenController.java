@@ -12,18 +12,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.company.Database;
+import sample.company.Employee;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginScreenController implements Initializable {
 
-    public static String currentUser;
-    private HashMap<String,String> accounts = new HashMap<>();
+    private static Employee currentUser;
     @FXML
     private JFXTextField txtUsername;
     @FXML
@@ -36,10 +36,19 @@ public class LoginScreenController implements Initializable {
     private JFXButton btnRestoreImg;
     @FXML
     private JFXButton btnMinimizeImg;
+    private Database database;
+
+    public static Employee getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(Employee currentUser) {
+        LoginScreenController.currentUser = currentUser;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setPasswords();
+        database = Main.getDatabase();
     }
 
     public void handleButtonAction(ActionEvent event) {
@@ -61,15 +70,15 @@ public class LoginScreenController implements Initializable {
         if (eventSource == btnSignIn) {
             String username = txtUsername.getText();
             String password = txtPassword.getText();
-            currentUser = username;
 
-            changeScene("../fxmls/homeScreen.fxml");
 
-            /*if (username.length() > 0 && accounts.get(username) != null && accounts.get(username).equals(password)) {
+            if (username.length() > 0 && database.getCYGCOMPANY().getEmployeeHashMap().get(username) != null &&
+                database.getCYGCOMPANY().getEmployeeHashMap().get(username).getPassword().equals(password)) {
+                setCurrentUser(database.getCYGCOMPANY().getEmployeeHashMap().get(username));
                 System.out.println("Giriş başarılı");
-                pnlHome.toFront();
+                changeScene("../fxmls/homeScreen.fxml");
             } else
-                System.out.println("şifre yanlış");*/
+                System.out.println("şifre yanlış");
         }
     }
 
@@ -82,13 +91,4 @@ public class LoginScreenController implements Initializable {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
         }
     }
-
-    public void setPasswords() {
-        accounts.put("oktay", "1212");
-        accounts.put("goksel", "1326");
-        accounts.put("berhan", "01adana01");
-        accounts.put("taylan", "2121");
-    }
-
-
 }

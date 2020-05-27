@@ -13,19 +13,23 @@ import java.util.HashMap;
 
 
 public class Shop implements InventoryManager, SalesManager {
-    private static int _ShopID = 1;
+    private static int _ShopID = 0;
     private ArrayList<Employee> employeeList;
-    private int phoneNumber;
+    private String phoneNumber;
     private String emailAddress;
     private Address address;
+    private String name;
     private int shopID;
     private HashMap<Integer,Integer> itemQuantity; //<item id, quantity>
     private HashMap<Integer,Item> itemBag;
     private HashMap<Integer,Receipt> receiptHashMap;
+    private double income;
+    private HashMap<String,Integer> saleCount;
 
 
-    public Shop(int phoneNumber, String emailAddress, Address address) {
+    public Shop(String name, String phoneNumber, String emailAddress, Address address) {
         this.shopID = _ShopID++;
+        this.name = name;
         this.employeeList = new ArrayList<>();
         this.itemQuantity = new HashMap<>();
         this.phoneNumber = phoneNumber;
@@ -33,7 +37,8 @@ public class Shop implements InventoryManager, SalesManager {
         this.address = address;
         this.itemBag = new HashMap<>();
         this.receiptHashMap = new HashMap<>();
-
+        this.income = 0;
+        this.saleCount = new HashMap<>();
     }
 
     public static int get_ShopID() {
@@ -42,6 +47,38 @@ public class Shop implements InventoryManager, SalesManager {
 
     public static void set_ShopID(int _ShopID) {
         Shop._ShopID = _ShopID;
+    }
+
+    public ArrayList<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(ArrayList<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public HashMap<Integer,Integer> getItemQuantity() {
+        return itemQuantity;
+    }
+
+    public void setItemQuantity(HashMap<Integer,Integer> itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
+
+    public HashMap<Integer,Item> getItemBag() {
+        return itemBag;
+    }
+
+    public void setItemBag(HashMap<Integer,Item> itemBag) {
+        this.itemBag = itemBag;
     }
 
     public int getQuantityOfItem(int itemId) {
@@ -64,11 +101,11 @@ public class Shop implements InventoryManager, SalesManager {
         this.employeeList = employees;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -104,11 +141,11 @@ public class Shop implements InventoryManager, SalesManager {
     @Override
     public void addNewItem(Item item, int quantity) {
         itemQuantity.put(item.getItemID(), quantity);
+        itemBag.put(item.getItemID(), item);
     }
 
     @Override
     public void transferItem(Shop destinationShop, Item transferredItem, int quantity) {
-        //TODO -quantity changed with itemQuantity.get(transferredItem.getItemID())-quantity
         itemQuantity.replace(transferredItem.getItemID(), itemQuantity.get(transferredItem.getItemID()) - quantity);
         if (destinationShop.itemQuantity.get(transferredItem.getItemID()) == null) {
             destinationShop.addNewItem(transferredItem, quantity);
@@ -123,13 +160,12 @@ public class Shop implements InventoryManager, SalesManager {
     }
 
 
-    //TODO this methods implements by oktay turkdagli
     @Override
     public void sellItem(ArrayList<BasketItem> items, Employee employee) {
         double totalPrice = 0;
         for (BasketItem item : items) {
-            //TODO Will Report
-            updateItem(itemBag.get(item.getItemID()), -item.getQuantity());
+
+            updateItem(itemBag.get(item.getItemID()), - item.getQuantity());
             totalPrice = totalPrice + item.getTotal();
         }
 
@@ -143,6 +179,8 @@ public class Shop implements InventoryManager, SalesManager {
 
         Receipt receipt = new Receipt(date, totalPrice, employee, items);
         receiptHashMap.put(receipt.getReceiptID(), receipt);
+        income += totalPrice ;
+
     }
 
     @Override
